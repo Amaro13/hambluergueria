@@ -18,43 +18,46 @@ import { User } from './entities/users.entities';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  @ApiOperation({
-    summary: 'List all the users',
-  })
-  getAll(): Promise<User[]> {
-    return this.usersService.getAll();
-  }
-
-  @Get(':id')
-  @ApiOperation({
-    summary: 'List user by id',
-  })
-  getById(@Param('id') id: string): Promise<User> {
-    return this.usersService.getById(id);
-  }
-
   @Post()
   @ApiOperation({
     summary: 'Create a new user',
   })
-  create(@Body() dto: CreateUserDto): Promise<User> {
+  create(@Body() dto: CreateUserDto): Promise<User | void> {
     return this.usersService.create(dto);
   }
 
-  @Delete(':id')
+  @Get()
   @ApiOperation({
-    summary: 'Delete a user',
+    summary: 'List all users',
   })
-  delete(@Param('id') id: string) {
-    return this.usersService.delete(id);
+  findAll(): Promise<User[]> {
+    return this.usersService.findAll();
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'List usuer by id',
+  })
+  findOne(@Param('id') id: string): Promise<User> {
+    return this.usersService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOperation({
     summary: 'Update a user',
   })
-  update(@Param('id') id: string, @Body() dto: UpdateUserDto): Promise<User> {
+  update(
+    @Param('id') id: string,
+    @Body() dto: UpdateUserDto,
+  ): Promise<User | void> {
     return this.usersService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete a user',
+  })
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(id);
   }
 }

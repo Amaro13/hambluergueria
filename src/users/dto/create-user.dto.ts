@@ -19,7 +19,7 @@ export class CreateUserDto {
   @IsEmail()
   @ApiProperty({
     example: 'stranger@outlook.com',
-    description: 'Email to be used',
+    description: 'Email to be created',
   })
   email: string;
 
