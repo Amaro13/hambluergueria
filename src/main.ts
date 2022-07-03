@@ -12,9 +12,10 @@ async function bootstrap() {
     .setTitle('Hambluergueria Blue')
     .setDescription('API of Blue`s Burguer Place')
     .setVersion('1.0.0')
-    .addTag('status')
     .addTag('users')
     .addTag('products')
+    .addTag('status')
+    .addTag('tables')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
