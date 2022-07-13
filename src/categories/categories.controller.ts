@@ -6,21 +6,25 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard())
 @ApiTags('categories')
+@ApiBearerAuth()
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
   @ApiOperation({
-    summary: 'Criação de categorias',
+    summary: 'Creating the categories',
   })
   create(@Body() dto: CreateCategoryDto): Promise<Category> {
     return this.categoriesService.create(dto);
@@ -28,7 +32,7 @@ export class CategoriesController {
 
   @Get()
   @ApiOperation({
-    summary: 'Listagem de categorias',
+    summary: 'List of the categories',
   })
   findAll(): Promise<Category[]> {
     return this.categoriesService.findAll();
@@ -36,7 +40,7 @@ export class CategoriesController {
 
   @Get(':id')
   @ApiOperation({
-    summary: 'Listagem de uma categoria',
+    summary: 'Listing a category',
   })
   findOne(@Param('id') id: string): Promise<Category> {
     return this.categoriesService.findOne(id);
@@ -44,7 +48,7 @@ export class CategoriesController {
 
   @Patch(':id')
   @ApiOperation({
-    summary: 'Atualização de uma categoria',
+    summary: 'Updating a category',
   })
   update(
     @Param('id') id: string,
@@ -55,7 +59,7 @@ export class CategoriesController {
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Exclusão de uma categoria',
+    summary: 'Removing a category',
   })
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(id);
