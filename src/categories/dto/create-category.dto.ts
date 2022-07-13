@@ -5,8 +5,8 @@ export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Nome da categoria de produtos',
-    example: 'Lanches',
+    description: 'Name of the product categories',
+    example: 'Lunch',
   })
   name: string;
 }
