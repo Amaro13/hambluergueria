@@ -1,17 +1,19 @@
 import {
   Body,
   Controller,
-  Get,
-  Post,
-  Patch,
-  Param,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersService } from './users.service';
 import { User } from './entities/users.entity';
+import { UsersService } from './users.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('users')
 @Controller('users')
@@ -27,25 +29,31 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(AuthGuard())
   @ApiOperation({
     summary: 'List all users',
   })
+  @ApiBearerAuth()
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard())
   @ApiOperation({
-    summary: 'List usuer by id',
+    summary: 'List a user by id',
   })
+  @ApiBearerAuth()
   findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard())
   @ApiOperation({
     summary: 'Update a user',
   })
+  @ApiBearerAuth()
   update(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
@@ -54,9 +62,11 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard())
   @ApiOperation({
     summary: 'Delete a user',
   })
+  @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }

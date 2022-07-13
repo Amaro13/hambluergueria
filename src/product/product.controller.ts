@@ -6,45 +6,59 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
-import { ProductService } from './product.service';
+import { ProductsService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Product } from './entities/product.entity';
+import { AuthGuard } from '@nestjs/passport';
 
-@ApiTags('product')
-@Controller('product')
-export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+@UseGuards(AuthGuard())
+@ApiTags('products')
+@ApiBearerAuth()
+@Controller('products')
+export class ProductsController {
+  constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Product creation.' })
+  @ApiOperation({
+    summary: 'Creation of products',
+  })
   create(@Body() dto: CreateProductDto) {
-    return this.productService.create(dto);
+    return this.productsService.create(dto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'List all products.' })
+  @ApiOperation({
+    summary: 'List all the products',
+  })
   findAll(): Promise<Product[]> {
-    return this.productService.findAll();
+    return this.productsService.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'List one product.' })
+  @ApiOperation({
+    summary: 'List a product',
+  })
   findOne(@Param('id') id: string) {
-    return this.productService.findOne(id);
+    return this.productsService.findOne(id);
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update product.' })
+  @ApiOperation({
+    summary: 'Updating a product',
+  })
   update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
-    return this.productService.update(id, dto);
+    return this.productsService.update(id, dto);
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete product.' })
+  @ApiOperation({
+    summary: 'Removing a product',
+  })
   remove(@Param('id') id: string) {
-    return this.productService.remove(id);
+    return this.productsService.remove(id);
   }
 }
