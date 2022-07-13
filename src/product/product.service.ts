@@ -6,14 +6,13 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 
 @Injectable()
-export class ProductService {
+export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateProductDto): Promise<Product | void> {
-    const product = this.prisma.product
+    return this.prisma.product
       .create({ data: dto })
       .catch(handleErrorConstraintUnique);
-    return product;
   }
 
   findAll(): Promise<Product[]> {
@@ -26,7 +25,7 @@ export class ProductService {
     });
 
     if (!product) {
-      throw new NotFoundException(`Id entry:'${id}' not found`);
+      throw new NotFoundException(`Id entry '${id}' not found`);
     }
 
     return product;
